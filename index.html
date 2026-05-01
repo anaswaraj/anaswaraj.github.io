@@ -1680,6 +1680,131 @@ footer {
   .trainers-grid { grid-template-columns: 1fr; }
   .trainer-card { border-right: none; }
 }
+
+/* ===== PLACEMENT SECTION ===== */
+.placement-hero {
+  background: var(--accent-yellow);
+  padding: 72px 0 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.placement-hero::before {
+  content: 'HIRED';
+  position: absolute;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 280px;
+  letter-spacing: -0.06em;
+  color: rgba(0,0,0,0.05);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+}
+.placement-hero > * { position: relative; z-index: 1; }
+.placement-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+  margin-bottom: 16px;
+}
+.placement-headline {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(40px, 7vw, 72px);
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  color: #0d0d0d;
+  margin-bottom: 20px;
+}
+.placement-sub {
+  font-family: var(--sans);
+  font-size: 18px;
+  color: rgba(0,0,0,0.65);
+  max-width: 560px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+.placement-stats {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  margin: 0 auto;
+  max-width: 860px;
+}
+.placement-stat {
+  flex: 1;
+  min-width: 160px;
+  padding: 32px 24px;
+  border-right: 1px solid rgba(0,0,0,0.15);
+}
+.placement-stat:last-child { border-right: none; }
+.placement-stat-num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 48px;
+  letter-spacing: -0.03em;
+  color: #0d0d0d;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.placement-stat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.55);
+}
+
+/* Cards row */
+.placement-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 2px solid var(--ink);
+  margin-top: 0;
+}
+.placement-card {
+  padding: 44px 36px;
+  border-right: 1px solid var(--rule);
+  background: var(--bg);
+  transition: background 0.25s;
+}
+.placement-card:last-child { border-right: none; }
+.placement-card:hover { background: var(--bg-card); }
+.placement-card-icon {
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+.placement-card-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.placement-card-body {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+.placement-card-body strong { color: var(--accent-yellow); font-weight: 600; }
+
+@media (max-width: 768px) {
+  .placement-cards { grid-template-columns: 1fr; }
+  .placement-card { border-right: none; border-bottom: 1px solid var(--rule); }
+  .placement-stats { flex-direction: column; }
+  .placement-stat { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.15); }
+}
+
 </style>
 </head>
 <body>
@@ -1992,6 +2117,60 @@ footer {
 
   </div>
 </section>
+
+<section id="placement" style="padding:0; max-width:none;">
+
+  <!-- Yellow hero banner -->
+  <div class="placement-hero">
+    <div class="placement-eyebrow">/ Real Results. Real Jobs.</div>
+    <h2 class="placement-headline">Your Batchmate<br>Just Got Placed.<br>You?</h2>
+    <p class="placement-sub">JavaNoxLab students don't just learn Java — they get hired. Through industry referrals, project portfolios, and interview coaching, we make sure your skills actually land you a job.</p>
+
+    <div class="placement-stats">
+      <div class="placement-stat">
+        <div class="placement-stat-num">93%</div>
+        <div class="placement-stat-label">Students placed within 6 months</div>
+      </div>
+      <div class="placement-stat">
+        <div class="placement-stat-num">3×</div>
+        <div class="placement-stat-label">Average salary hike after training</div>
+      </div>
+      <div class="placement-stat">
+        <div class="placement-stat-num">50+</div>
+        <div class="placement-stat-label">Companies hired our students</div>
+      </div>
+      <div class="placement-stat">
+        <div class="placement-stat-num">100%</div>
+        <div class="placement-stat-label">Industry referral network access</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three pillars of placement -->
+  <div class="placement-cards">
+
+    <div class="placement-card reveal">
+      <div class="placement-card-icon">🤝</div>
+      <div class="placement-card-title">Industry Referrals</div>
+      <p class="placement-card-body">Our trainers work at <strong>TCS, Digit Insurance</strong> and top product companies. When you're ready, we refer you directly — skipping the resume black hole. A referral from inside the company changes everything.</p>
+    </div>
+
+    <div class="placement-card reveal">
+      <div class="placement-card-icon">🚀</div>
+      <div class="placement-card-title">Job-Ready Projects</div>
+      <p class="placement-card-body">You'll graduate with a <strong>real Spring Boot capstone project</strong> on GitHub — REST APIs, Microservices, Kafka, Redis. Three of our students got their first interviews purely because recruiters clicked their GitHub link.</p>
+    </div>
+
+    <div class="placement-card reveal">
+      <div class="placement-card-icon">🎯</div>
+      <div class="placement-card-title">Interview Coaching</div>
+      <p class="placement-card-body">We run <strong>mock interviews</strong> with the exact Java 8, Spring Boot, and SQL questions asked at TCS, Infosys, Wipro, Cognizant, and product startups — so you walk in prepared, not nervous.</p>
+    </div>
+
+  </div>
+
+</section>
+
 <section id="testimonials">
   <div class="section-header">
     <div>
