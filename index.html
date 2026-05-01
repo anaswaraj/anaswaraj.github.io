@@ -1880,7 +1880,7 @@ footer {
 }
 
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 </head>
 <body>
 
@@ -2625,20 +2625,14 @@ document.getElementById('enquiry-modal').addEventListener('click', function(e) {
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// ─── EMAIL SUBMISSION ───────────────────────────────────────────────────────
-// Uses EmailJS — 100% client-side, no redirect, no mailto popup.
-// SETUP (one-time, 2 minutes):
-//   1. Go to https://emailjs.com → sign up free
-//   2. Add Gmail service → note your Service ID
-//   3. Create email template → note your Template ID
-//   4. Go to Account → API Keys → copy your Public Key
-//   5. Replace the 3 values below
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'abc123XYZ'
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_xxxxxx'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xxxxxx'
-// In your EmailJS template, use these variables:
-//   {{from_name}}  {{from_email}}  {{phone}}  {{track}}  {{message}}
-//   Set "To Email" in the template to: javanoxlab@gmail.com
+// ─── EMAIL SUBMISSION via Web3Forms ─────────────────────────────────────────
+// HOW TO ACTIVATE (30 seconds, one time):
+//   1. Go to https://web3forms.com
+//   2. Enter javanoxlab@gmail.com → click "Create Access Key"
+//   3. Check your Gmail inbox → copy the key they send
+//   4. Paste it below replacing YOUR_ACCESS_KEY_HERE
+//   Done — emails arrive directly in Gmail, student sees nothing.
+const W3F_KEY = '1c83de8c-40d4-431d-a6a1-230ce49538d3';
 
 async function submitEnquiry(e) {
   e.preventDefault();
@@ -2646,39 +2640,43 @@ async function submitEnquiry(e) {
   const btn  = document.getElementById('submit-btn');
   const err  = document.getElementById('form-error');
 
-  btn.textContent = 'Sending…';
-  btn.disabled    = true;
+  btn.textContent   = 'Sending…';
+  btn.disabled      = true;
   btn.style.opacity = '0.65';
   err.style.display = 'none';
 
-  const params = {
-    from_name : form.elements['name'].value.trim(),
-    from_email: form.elements['email'].value.trim(),
+  const payload = {
+    access_key: W3F_KEY,
+    subject   : 'Enquiry for java coaching',
+    from_name : 'JavaNoxLab Website',
+    name      : form.elements['name'].value.trim(),
+    email     : form.elements['email'].value.trim(),
     phone     : form.elements['phone'].value.trim(),
     track     : form.elements['track'].value,
-    message   : form.elements['message'].value.trim() || '(none)',
-    to_email  : 'javanoxlab@gmail.com',
-    subject   : 'Enquiry for java coaching'
+    message   : form.elements['message'].value.trim() || '(none)'
   };
 
   try {
-    // Initialise EmailJS with public key each call (safe to repeat)
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-    const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    const res  = await fetch('https://api.web3forms.com/submit', {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body   : JSON.stringify(payload)
+    });
+    const json = await res.json();
 
-    if (result.status === 200) {
-      document.getElementById('modal-form-view').style.display   = 'none';
+    if (json.success) {
+      document.getElementById('modal-form-view').style.display    = 'none';
       document.getElementById('modal-success-view').style.display = 'block';
       launchConfetti();
     } else {
-      throw new Error('Send failed: ' + result.text);
+      throw new Error(json.message || 'Failed');
     }
   } catch (ex) {
-    // Show inline error — NO redirect, NO mailto popup
-    err.textContent  = '⚠ Could not send right now. Please try again or WhatsApp +91 70086 73347.';
+    err.textContent   = '⚠ Could not send. Please paste your Web3Forms key or WhatsApp +91 70086 73347.';
     err.style.display = 'block';
-    btn.textContent  = 'Send Enquiry →';
-    btn.disabled     = false;
+  } finally {
+    btn.textContent   = 'Send Enquiry →';
+    btn.disabled      = false;
     btn.style.opacity = '1';
   }
 }
