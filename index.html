@@ -63,14 +63,26 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 50;
-  padding: 16px 40px;
+  padding: 0 48px;
+  height: 72px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(13, 13, 13, 0.78);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  border-bottom: 1px solid var(--rule);
+  background: rgba(10, 10, 10, 0.94);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 8px 40px rgba(0,0,0,0.6);
+}
+
+/* Yellow accent line at very top of nav */
+nav::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent-yellow) 30%, var(--accent-yellow) 70%, transparent 100%);
+  opacity: 0.7;
 }
 
 .nav-brand {
@@ -93,10 +105,15 @@ nav {
 
 .nav-brand-name {
   font-family: var(--display);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   color: var(--ink);
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #fff 0%, #e8e8e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .nav-brand-tag {
@@ -111,48 +128,51 @@ nav {
 
 .nav-links {
   display: flex;
-  gap: 36px;
-  font-size: 13px;
+  gap: 4px;
+  font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
 }
 
 .nav-links a {
   color: var(--ink-soft);
   text-decoration: none;
-  transition: color 0.2s ease;
+  padding: 8px 14px;
+  border-radius: 2px;
+  transition: color 0.2s ease, background 0.2s ease;
   position: relative;
 }
 
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 100%;
-  bottom: -4px;
-  height: 1.5px;
-  background: var(--ink);
-  transition: right 0.25s ease;
+.nav-links a:hover {
+  color: var(--ink);
+  background: rgba(255,255,255,0.06);
 }
 
-.nav-links a:hover::after { right: 0; }
+.nav-links a::after {
+  content: none;
+}
 
 .nav-cta {
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 12px 22px;
-  background: var(--ink);
+  letter-spacing: 0.14em;
+  padding: 10px 22px;
+  background: var(--accent-yellow);
   color: #0d0d0d;
   text-decoration: none;
+  border-radius: 2px;
   transition: all 0.2s ease;
+  box-shadow: 0 0 0 0 rgba(234,179,8,0.4);
+  white-space: nowrap;
 }
 
 .nav-cta:hover {
-  background: var(--accent-yellow);
-  color: #0d0d0d;
+  background: #fde047;
+  box-shadow: 0 0 20px rgba(234,179,8,0.35);
+  transform: translateY(-1px);
 }
 
 /* ===== HERO ===== */
@@ -2423,26 +2443,153 @@ footer {
   </div>
 </footer>
 
+<!-- ===== BOOK DEMO MODAL ===== -->
+<div id="enquiry-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:200; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px);">
+  <div style="background:#111; border:1px solid rgba(255,255,255,0.1); padding:48px 40px; max-width:500px; width:100%; position:relative; box-shadow:0 24px 80px rgba(0,0,0,0.7); border-radius:2px;">
+
+    <!-- Close button -->
+    <button onclick="closeModal()" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:#fff; font-size:16px; cursor:pointer; width:34px; height:34px; border-radius:2px; display:flex; align-items:center; justify-content:center; transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">✕</button>
+
+    <!-- FORM VIEW -->
+    <div id="modal-form-view">
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent-yellow); margin-bottom:12px;">/ Book Free Demo</div>
+      <h3 style="font-family:var(--display); font-weight:400; font-size:32px; letter-spacing:-0.02em; line-height:1.1; margin-bottom:8px; color:#fff;">Let's talk your <em style="font-style:italic; background:var(--accent-yellow); color:#0d0d0d; padding:2px 8px;">goals.</em></h3>
+      <p style="font-family:var(--sans); font-size:14px; color:rgba(255,255,255,0.45); margin-bottom:28px;">Fill this in — Swaraj will reach out within 24 hours.</p>
+
+      <form id="enquiry-form" onsubmit="submitEnquiry(event)" style="display:flex; flex-direction:column; gap:12px;">
+        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
+        <input type="hidden" name="subject" value="Enquiry for java coaching">
+        <input type="hidden" name="redirect" value="">
+        <input type="checkbox" name="botcheck" style="display:none;">
+
+        <input required name="name" placeholder="Your full name" style="padding:13px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:var(--sans); font-size:14px; border-radius:2px; outline:none; transition:border 0.2s;" onfocus="this.style.borderColor='rgba(234,179,8,0.6)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+
+        <input required type="email" name="email" placeholder="Your email address" style="padding:13px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:var(--sans); font-size:14px; border-radius:2px; outline:none; transition:border 0.2s;" onfocus="this.style.borderColor='rgba(234,179,8,0.6)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+
+        <input required type="tel" name="phone" placeholder="Phone number (WhatsApp preferred)" style="padding:13px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:var(--sans); font-size:14px; border-radius:2px; outline:none; transition:border 0.2s;" onfocus="this.style.borderColor='rgba(234,179,8,0.6)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+
+        <select required name="track" style="padding:13px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.6); font-family:var(--sans); font-size:14px; border-radius:2px; outline:none; cursor:pointer;">
+          <option value="" style="background:#111;">Which track interests you?</option>
+          <option value="Core Java" style="background:#111; color:#fff;">Core Java</option>
+          <option value="Java + SQL" style="background:#111; color:#fff;">Java + SQL</option>
+          <option value="Java + Spring Boot + SQL" style="background:#111; color:#fff;">Java + Spring Boot + SQL</option>
+          <option value="Not sure yet" style="background:#111; color:#fff;">Not sure yet — help me decide</option>
+        </select>
+
+        <textarea name="message" placeholder="Briefly: your background & goals (optional)" rows="3" style="padding:13px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:var(--sans); font-size:14px; border-radius:2px; outline:none; resize:vertical; transition:border 0.2s;" onfocus="this.style.borderColor='rgba(234,179,8,0.6)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+
+        <button type="submit" id="submit-btn" style="margin-top:4px; padding:15px 24px; background:var(--accent-yellow); color:#0d0d0d; font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; border:none; border-radius:2px; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:8px;" onmouseover="this.style.background='#fde047'; this.style.boxShadow='0 0 24px rgba(234,179,8,0.4)'" onmouseout="this.style.background='var(--accent-yellow)'; this.style.boxShadow='none'">
+          Send Enquiry →
+        </button>
+
+        <div id="form-error" style="display:none; text-align:center; font-family:var(--mono); font-size:12px; color:#f87171; padding:8px;"></div>
+      </form>
+    </div>
+
+    <!-- SUCCESS VIEW -->
+    <div id="modal-success-view" style="display:none; text-align:center; padding:16px 0;">
+      <div style="width:68px; height:68px; background:var(--accent-yellow); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent-yellow); margin-bottom:12px;">/ Enquiry Received</div>
+      <h3 style="font-family:var(--display); font-weight:400; font-size:36px; letter-spacing:-0.02em; line-height:1.1; color:#fff; margin-bottom:16px;">You're all <em style="font-style:italic; background:var(--accent-yellow); color:#0d0d0d; padding:2px 8px;">set!</em></h3>
+      <p style="font-family:var(--sans); font-size:16px; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:6px;">Swaraj will reach out within <strong style="color:#fff;">24 hours.</strong></p>
+      <p style="font-family:var(--sans); font-size:13px; color:rgba(255,255,255,0.35); margin-bottom:32px;">Check your inbox & WhatsApp.</p>
+      <a href="https://wa.me/917008673347?text=Hi%20Swaraj%2C%20I%20just%20submitted%20an%20enquiry%20on%20JavaNoxLab!" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:13px 24px; background:#25d366; color:#fff; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; border-radius:2px; transition:all 0.2s; margin-bottom:16px;" onmouseover="this.style.background='#1ebe5a'" onmouseout="this.style.background='#25d366'">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.88 11.9L4 20l4.2-1.1a7.93 7.93 0 0 0 3.84.98h.01a7.94 7.94 0 0 0 5.56-13.56zm-5.55 12.2a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.43-.16-.25a6.6 6.6 0 1 1 5.6 3.1zm3.62-4.93c-.2-.1-1.17-.58-1.36-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.62.77-.11.13-.23.15-.43.05-.2-.1-.84-.31-1.6-.99-.6-.53-1-1.18-1.12-1.38-.12-.2-.01-.31.09-.4.1-.1.2-.24.3-.36.1-.12.13-.2.2-.34.06-.13.03-.25-.02-.35-.05-.1-.44-1.07-.6-1.46-.16-.38-.32-.33-.44-.34h-.37c-.13 0-.34.05-.51.25-.18.2-.67.65-.67 1.6 0 .94.69 1.84.78 1.97.1.13 1.36 2.07 3.29 2.9.46.2.82.32 1.1.4.46.15.88.13 1.21.08.37-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z"/></svg>
+        Ping on WhatsApp too
+      </a>
+      <br>
+      <button onclick="closeModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-family:var(--mono); font-size:11px; letter-spacing:0.1em; cursor:pointer; text-decoration:underline; text-underline-offset:3px; margin-top:4px;" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Close window</button>
+    </div>
+
+  </div>
+</div>
+
 <script>
 // FAQ accordion
 document.querySelectorAll('.faq-item').forEach(item => {
-  item.addEventListener('click', () => {
-    item.classList.toggle('open');
-  });
+  item.addEventListener('click', () => item.classList.toggle('open'));
 });
 
 // Reveal on scroll
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-</script>
+// Modal open/close
+function openModal() {
+  document.getElementById('enquiry-modal').style.display = 'flex';
+  document.getElementById('modal-form-view').style.display = 'block';
+  document.getElementById('modal-success-view').style.display = 'none';
+  document.getElementById('enquiry-form').reset();
+  document.getElementById('form-error').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('enquiry-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+// Close on backdrop click
+document.getElementById('enquiry-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+// Close on Escape key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+// Form submission via Web3Forms (free — sends to javanoxlab@gmail.com)
+async function submitEnquiry(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const errBox = document.getElementById('form-error');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  errBox.style.display = 'none';
+
+  const formData = new FormData(e.target);
+  // Ensure email reaches javanoxlab@gmail.com via Web3Forms
+  formData.append('to_email', 'javanoxlab@gmail.com');
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: formData
+    });
+    const json = await res.json();
+
+    if (json.success) {
+      // Show success screen
+      document.getElementById('modal-form-view').style.display = 'none';
+      document.getElementById('modal-success-view').style.display = 'block';
+    } else {
+      throw new Error(json.message || 'Submission failed');
+    }
+  } catch (err) {
+    // Fallback: open mailto so enquiry is never lost
+    const f = e.target;
+    const name = f.name?.value || f.elements['name']?.value || '';
+    const email = f.elements['email']?.value || '';
+    const phone = f.elements['phone']?.value || '';
+    const track = f.elements['track']?.value || '';
+    const message = f.elements['message']?.value || '';
+    const mailto = 'mailto:javanoxlab@gmail.com'
+      + '?subject=' + encodeURIComponent('Enquiry for java coaching')
+      + '&body=' + encodeURIComponent(
+          'Name: ' + name + '\nEmail: ' + email + '\nPhone: ' + phone +
+          '\nTrack: ' + track + '\n\nMessage:\n' + (message || '(none)')
+        );
+    window.location.href = mailto;
+    // Still show success
+    document.getElementById('modal-form-view').style.display = 'none';
+    document.getElementById('modal-success-view').style.display = 'block';
+  }
+
+  btn.textContent = 'Send Enquiry →';
+  btn.disabled = false;
+  btn.style.opacity = '1';
+}
+</script>
 </body>
 </html>
