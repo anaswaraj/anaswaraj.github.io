@@ -247,7 +247,10 @@ nav::before {
   font-size: clamp(56px, 10vw, 150px);
   line-height: 0.95;
   letter-spacing: -0.025em;
-  color: var(--ink);
+  background: linear-gradient(160deg, #ffffff 0%, #f5f0e8 50%, #e8dfc8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 8px;
 }
 
@@ -294,7 +297,13 @@ nav::before {
   letter-spacing: -0.02em;
   position: relative;
   display: inline-block;
-  padding: 0 8px;
+  padding: 0 10px;
+  color: #0d0d0d;
+  -webkit-text-fill-color: #0d0d0d;
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  z-index: 1;
 }
 
 .hero-headline .accent-word::before {
@@ -608,7 +617,10 @@ section {
   font-size: clamp(40px, 5.5vw, 80px);
   line-height: 1;
   letter-spacing: -0.025em;
-  color: var(--ink);
+  background: linear-gradient(135deg, #ffffff 0%, #f0ead8 55%, #d4b896 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .section-title em {
@@ -617,16 +629,14 @@ section {
   font-weight: 300;
   letter-spacing: -0.02em;
   position: relative;
+  background: linear-gradient(135deg, #fde68a 0%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .section-title em::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 0.08em;
-  height: 4px;
-  background: var(--accent-yellow);
-  z-index: -1;
+  content: none;
 }
 
 .section-lead {
@@ -1568,6 +1578,25 @@ footer {
   to { transform: translateX(-50%); }
 }
 
+@keyframes ring-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes confetti-fall {
+  0%   { transform: translateY(-10px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(340px) rotate(720deg); opacity: 0; }
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(40px);
@@ -1851,6 +1880,7 @@ footer {
 }
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -2457,10 +2487,6 @@ footer {
       <p style="font-family:var(--sans); font-size:14px; color:rgba(255,255,255,0.45); margin-bottom:28px;">Fill this in — Swaraj will reach out within 24 hours.</p>
 
       <form id="enquiry-form" onsubmit="submitEnquiry(event)" style="display:flex; flex-direction:column; gap:12px;">
-        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
-        <input type="hidden" name="subject" value="Enquiry for java coaching">
-        <input type="hidden" name="redirect" value="">
-        <input type="checkbox" name="botcheck" style="display:none;">
 
         <input required name="name" placeholder="Your full name" style="padding:13px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; font-family:var(--sans); font-size:14px; border-radius:2px; outline:none; transition:border 0.2s;" onfocus="this.style.borderColor='rgba(234,179,8,0.6)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
 
@@ -2487,20 +2513,83 @@ footer {
     </div>
 
     <!-- SUCCESS VIEW -->
-    <div id="modal-success-view" style="display:none; text-align:center; padding:16px 0;">
-      <div style="width:68px; height:68px; background:var(--accent-yellow); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px;">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <div id="modal-success-view" style="display:none; text-align:center; padding:8px 0 4px; position:relative; overflow:hidden;">
+
+      <!-- Animated confetti dots -->
+      <div id="confetti-wrap" style="position:absolute; inset:0; pointer-events:none; overflow:hidden;"></div>
+
+      <!-- Animated checkmark ring -->
+      <div style="position:relative; width:88px; height:88px; margin:0 auto 28px;">
+        <svg width="88" height="88" viewBox="0 0 88 88" style="position:absolute; inset:0;">
+          <circle cx="44" cy="44" r="40" fill="none" stroke="rgba(234,179,8,0.15)" stroke-width="3"/>
+          <circle cx="44" cy="44" r="40" fill="none" stroke="var(--accent-yellow)" stroke-width="3"
+            stroke-dasharray="251" stroke-dashoffset="251"
+            stroke-linecap="round"
+            style="transform:rotate(-90deg); transform-origin:center; animation: ring-draw 0.7s 0.1s cubic-bezier(0.4,0,0.2,1) forwards;"/>
+        </svg>
+        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; animation: pop-in 0.4s 0.65s cubic-bezier(0.34,1.56,0.64,1) both;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent-yellow)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
       </div>
-      <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--accent-yellow); margin-bottom:12px;">/ Enquiry Received</div>
-      <h3 style="font-family:var(--display); font-weight:400; font-size:36px; letter-spacing:-0.02em; line-height:1.1; color:#fff; margin-bottom:16px;">You're all <em style="font-style:italic; background:var(--accent-yellow); color:#0d0d0d; padding:2px 8px;">set!</em></h3>
-      <p style="font-family:var(--sans); font-size:16px; color:rgba(255,255,255,0.65); line-height:1.6; margin-bottom:6px;">Swaraj will reach out within <strong style="color:#fff;">24 hours.</strong></p>
-      <p style="font-family:var(--sans); font-size:13px; color:rgba(255,255,255,0.35); margin-bottom:32px;">Check your inbox & WhatsApp.</p>
-      <a href="https://wa.me/917008673347?text=Hi%20Swaraj%2C%20I%20just%20submitted%20an%20enquiry%20on%20JavaNoxLab!" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:13px 24px; background:#25d366; color:#fff; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; border-radius:2px; transition:all 0.2s; margin-bottom:16px;" onmouseover="this.style.background='#1ebe5a'" onmouseout="this.style.background='#25d366'">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.88 11.9L4 20l4.2-1.1a7.93 7.93 0 0 0 3.84.98h.01a7.94 7.94 0 0 0 5.56-13.56zm-5.55 12.2a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.43-.16-.25a6.6 6.6 0 1 1 5.6 3.1zm3.62-4.93c-.2-.1-1.17-.58-1.36-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.62.77-.11.13-.23.15-.43.05-.2-.1-.84-.31-1.6-.99-.6-.53-1-1.18-1.12-1.38-.12-.2-.01-.31.09-.4.1-.1.2-.24.3-.36.1-.12.13-.2.2-.34.06-.13.03-.25-.02-.35-.05-.1-.44-1.07-.6-1.46-.16-.38-.32-.33-.44-.34h-.37c-.13 0-.34.05-.51.25-.18.2-.67.65-.67 1.6 0 .94.69 1.84.78 1.97.1.13 1.36 2.07 3.29 2.9.46.2.82.32 1.1.4.46.15.88.13 1.21.08.37-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z"/></svg>
-        Ping on WhatsApp too
+
+      <!-- Label -->
+      <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--accent-yellow); margin-bottom:14px; animation: fade-up 0.5s 0.7s both;">
+        ✦ &nbsp;Enquiry Received&nbsp; ✦
+      </div>
+
+      <!-- Headline -->
+      <h3 style="font-family:var(--display); font-weight:400; font-size:38px; letter-spacing:-0.025em; line-height:1.05; color:#fff; margin-bottom:14px; animation: fade-up 0.5s 0.8s both;">
+        We'll see you<br>in <em style="font-style:italic; font-weight:300; background:var(--accent-yellow); -webkit-text-fill-color:#0d0d0d; color:#0d0d0d; padding:2px 10px; display:inline-block; transform:skew(-3deg);">class.</em>
+      </h3>
+
+      <!-- Sub -->
+      <p style="font-family:var(--sans); font-size:15px; color:rgba(255,255,255,0.55); line-height:1.65; margin-bottom:28px; animation: fade-up 0.5s 0.9s both;">
+        Swaraj will reach out within <strong style="color:rgba(255,255,255,0.9); font-weight:600;">24 hours</strong>.<br>Keep an eye on your inbox & WhatsApp.
+      </p>
+
+      <!-- Divider -->
+      <div style="height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); margin:0 -8px 24px; animation: fade-up 0.4s 1s both;"></div>
+
+      <!-- "What happens next" mini steps -->
+      <div style="display:flex; flex-direction:column; gap:10px; text-align:left; margin-bottom:28px; animation: fade-up 0.5s 1s both;">
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+          <div style="min-width:28px; height:28px; background:rgba(234,179,8,0.12); border:1px solid rgba(234,179,8,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:10px; color:var(--accent-yellow); font-weight:700; margin-top:1px;">1</div>
+          <div>
+            <div style="font-family:var(--sans); font-size:13px; font-weight:600; color:#fff; margin-bottom:2px;">Confirmation call / message</div>
+            <div style="font-family:var(--sans); font-size:12px; color:rgba(255,255,255,0.4);">Swaraj will confirm your demo slot personally.</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+          <div style="min-width:28px; height:28px; background:rgba(234,179,8,0.12); border:1px solid rgba(234,179,8,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:10px; color:var(--accent-yellow); font-weight:700; margin-top:1px;">2</div>
+          <div>
+            <div style="font-family:var(--sans); font-size:13px; font-weight:600; color:#fff; margin-bottom:2px;">Free demo class</div>
+            <div style="font-family:var(--sans); font-size:12px; color:rgba(255,255,255,0.4);">Live, 1-hour session — see how Swaraj teaches before committing.</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:12px;">
+          <div style="min-width:28px; height:28px; background:rgba(234,179,8,0.12); border:1px solid rgba(234,179,8,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:10px; color:var(--accent-yellow); font-weight:700; margin-top:1px;">3</div>
+          <div>
+            <div style="font-family:var(--sans); font-size:13px; font-weight:600; color:#fff; margin-bottom:2px;">Join the batch</div>
+            <div style="font-family:var(--sans); font-size:12px; color:rgba(255,255,255,0.4);">Pick the track & batch that fits your schedule. Start building.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp CTA -->
+      <a href="https://wa.me/917008673347?text=Hi%20Swaraj%2C%20I%20just%20submitted%20an%20enquiry%20on%20JavaNoxLab!" target="_blank"
+        style="display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px 24px; background:linear-gradient(135deg,#22c55e,#16a34a); color:#fff; font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; text-decoration:none; border-radius:2px; margin-bottom:12px; box-shadow:0 4px 20px rgba(34,197,94,0.25); animation: fade-up 0.5s 1.1s both; transition:all 0.2s;"
+        onmouseover="this.style.boxShadow='0 6px 28px rgba(34,197,94,0.4)'; this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.boxShadow='0 4px 20px rgba(34,197,94,0.25)'; this.style.transform='translateY(0)'">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.88 11.9L4 20l4.2-1.1a7.93 7.93 0 0 0 3.84.98h.01a7.94 7.94 0 0 0 5.56-13.56zm-5.55 12.2a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.43-.16-.25a6.6 6.6 0 1 1 5.6 3.1zm3.62-4.93c-.2-.1-1.17-.58-1.36-.64-.18-.07-.31-.1-.44.1-.13.2-.5.64-.62.77-.11.13-.23.15-.43.05-.2-.1-.84-.31-1.6-.99-.6-.53-1-1.18-1.12-1.38-.12-.2-.01-.31.09-.4.1-.1.2-.24.3-.36.1-.12.13-.2.2-.34.06-.13.03-.25-.02-.35-.05-.1-.44-1.07-.6-1.46-.16-.38-.32-.33-.44-.34h-.37c-.13 0-.34.05-.51.25-.18.2-.67.65-.67 1.6 0 .94.69 1.84.78 1.97.1.13 1.36 2.07 3.29 2.9.46.2.82.32 1.1.4.46.15.88.13 1.21.08.37-.06 1.17-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z"/></svg>
+        Also ping on WhatsApp
       </a>
-      <br>
-      <button onclick="closeModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-family:var(--mono); font-size:11px; letter-spacing:0.1em; cursor:pointer; text-decoration:underline; text-underline-offset:3px; margin-top:4px;" onmouseover="this.style.color='rgba(255,255,255,0.6)'" onmouseout="this.style.color='rgba(255,255,255,0.3)'">Close window</button>
+
+      <button onclick="closeModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.25); font-family:var(--mono); font-size:11px; letter-spacing:0.1em; cursor:pointer; text-decoration:underline; text-underline-offset:3px; animation: fade-up 0.4s 1.2s both; transition:color 0.2s;"
+        onmouseover="this.style.color='rgba(255,255,255,0.55)'" onmouseout="this.style.color='rgba(255,255,255,0.25)'">
+        Back to website
+      </button>
     </div>
 
   </div>
@@ -2531,64 +2620,90 @@ function closeModal() {
   document.getElementById('enquiry-modal').style.display = 'none';
   document.body.style.overflow = '';
 }
-// Close on backdrop click
 document.getElementById('enquiry-modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-// Close on Escape key
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-// Form submission via Web3Forms (free — sends to javanoxlab@gmail.com)
+// ─── EMAIL SUBMISSION ───────────────────────────────────────────────────────
+// Uses EmailJS — 100% client-side, no redirect, no mailto popup.
+// SETUP (one-time, 2 minutes):
+//   1. Go to https://emailjs.com → sign up free
+//   2. Add Gmail service → note your Service ID
+//   3. Create email template → note your Template ID
+//   4. Go to Account → API Keys → copy your Public Key
+//   5. Replace the 3 values below
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'abc123XYZ'
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_xxxxxx'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xxxxxx'
+// In your EmailJS template, use these variables:
+//   {{from_name}}  {{from_email}}  {{phone}}  {{track}}  {{message}}
+//   Set "To Email" in the template to: javanoxlab@gmail.com
+
 async function submitEnquiry(e) {
   e.preventDefault();
-  const btn = document.getElementById('submit-btn');
-  const errBox = document.getElementById('form-error');
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-  btn.style.opacity = '0.7';
-  errBox.style.display = 'none';
+  const form = e.target;
+  const btn  = document.getElementById('submit-btn');
+  const err  = document.getElementById('form-error');
 
-  const formData = new FormData(e.target);
-  // Ensure email reaches javanoxlab@gmail.com via Web3Forms
-  formData.append('to_email', 'javanoxlab@gmail.com');
+  btn.textContent = 'Sending…';
+  btn.disabled    = true;
+  btn.style.opacity = '0.65';
+  err.style.display = 'none';
+
+  const params = {
+    from_name : form.elements['name'].value.trim(),
+    from_email: form.elements['email'].value.trim(),
+    phone     : form.elements['phone'].value.trim(),
+    track     : form.elements['track'].value,
+    message   : form.elements['message'].value.trim() || '(none)',
+    to_email  : 'javanoxlab@gmail.com',
+    subject   : 'Enquiry for java coaching'
+  };
 
   try {
-    const res = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      body: formData
-    });
-    const json = await res.json();
+    // Initialise EmailJS with public key each call (safe to repeat)
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    const result = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
 
-    if (json.success) {
-      // Show success screen
-      document.getElementById('modal-form-view').style.display = 'none';
+    if (result.status === 200) {
+      document.getElementById('modal-form-view').style.display   = 'none';
       document.getElementById('modal-success-view').style.display = 'block';
+      launchConfetti();
     } else {
-      throw new Error(json.message || 'Submission failed');
+      throw new Error('Send failed: ' + result.text);
     }
-  } catch (err) {
-    // Fallback: open mailto so enquiry is never lost
-    const f = e.target;
-    const name = f.name?.value || f.elements['name']?.value || '';
-    const email = f.elements['email']?.value || '';
-    const phone = f.elements['phone']?.value || '';
-    const track = f.elements['track']?.value || '';
-    const message = f.elements['message']?.value || '';
-    const mailto = 'mailto:javanoxlab@gmail.com'
-      + '?subject=' + encodeURIComponent('Enquiry for java coaching')
-      + '&body=' + encodeURIComponent(
-          'Name: ' + name + '\nEmail: ' + email + '\nPhone: ' + phone +
-          '\nTrack: ' + track + '\n\nMessage:\n' + (message || '(none)')
-        );
-    window.location.href = mailto;
-    // Still show success
-    document.getElementById('modal-form-view').style.display = 'none';
-    document.getElementById('modal-success-view').style.display = 'block';
+  } catch (ex) {
+    // Show inline error — NO redirect, NO mailto popup
+    err.textContent  = '⚠ Could not send right now. Please try again or WhatsApp +91 70086 73347.';
+    err.style.display = 'block';
+    btn.textContent  = 'Send Enquiry →';
+    btn.disabled     = false;
+    btn.style.opacity = '1';
   }
+}
 
-  btn.textContent = 'Send Enquiry →';
-  btn.disabled = false;
-  btn.style.opacity = '1';
+// Confetti burst on success
+function launchConfetti() {
+  const wrap = document.getElementById('confetti-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  const colors = ['#f59e0b','#fde68a','#ffffff','#fbbf24','#a3e635','#34d399'];
+  for (let i = 0; i < 40; i++) {
+    const dot = document.createElement('div');
+    const size = Math.random() * 7 + 4;
+    dot.style.cssText = `
+      position:absolute;
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      left:${Math.random()*100}%;
+      top:-12px;
+      opacity:1;
+      animation: confetti-fall ${1.2 + Math.random()*1.4}s ${Math.random()*0.5}s ease-in forwards;
+    `;
+    wrap.appendChild(dot);
+  }
 }
 </script>
 </body>
