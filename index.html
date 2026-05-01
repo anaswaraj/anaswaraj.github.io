@@ -207,6 +207,7 @@ nav {
   font-size: 12px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  flex-wrap: wrap;
 }
 
 .hero-num {
@@ -215,6 +216,7 @@ nav {
   font-weight: 600;
   letter-spacing: -0.01em;
   font-style: italic;
+  white-space: nowrap;
 }
 
 .hero-eyebrow-text { color: var(--ink-mute); }
@@ -231,7 +233,7 @@ nav {
 
 .hero-headline .line {
   display: inline;
-  animation: slideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+  animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
 }
 
 .hero-headline .line::after {
@@ -241,6 +243,29 @@ nav {
 .hero-headline .line:nth-child(1) { animation-delay: 0.05s; }
 .hero-headline .line:nth-child(2) { animation-delay: 0.15s; }
 .hero-headline .line:nth-child(3) { animation-delay: 0.25s; }
+
+.hero-taglines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.hero-tagline-item {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.hero-tagline-accent {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--accent-yellow);
+  font-weight: 700;
+}
 
 .hero-headline .accent-word {
   font-family: var(--display);
@@ -274,7 +299,7 @@ nav {
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--bg-warm);
-  animation: fadeIn 1.2s ease 0.4s backwards;
+  animation: fadeIn 0.6s ease 0.2s backwards;
 }
 
 .hero-image-wrap img {
@@ -315,7 +340,7 @@ nav {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  animation: fadeIn 1.2s ease 0.5s backwards;
+  animation: fadeIn 0.6s ease 0.25s backwards;
 }
 
 .hero-lead {
@@ -433,7 +458,7 @@ nav {
   display: flex;
   gap: 64px;
   white-space: nowrap;
-  animation: marquee 40s linear infinite;
+  animation: marquee 20s linear infinite;
   font-family: var(--display);
   font-weight: 500;
   font-size: 18px;
@@ -1419,7 +1444,7 @@ footer {
   max-width: 1500px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 48px;
   margin-bottom: 32px;
 }
@@ -1559,7 +1584,7 @@ footer {
 @media (max-width: 640px) {
   nav { padding: 12px 20px; }
   .nav-links { display: none; }
-  .nav-brand-tag { display: none; }
+  .nav-brand-tag { display: block; font-size: 9px; }
   .hero-headline { font-size: 60px; line-height: 0.92; }
   .hero-stats { grid-template-columns: 1fr 1fr; }
   .stat:nth-child(2) { padding-left: 0; border-right: none; }
@@ -1694,7 +1719,7 @@ footer {
   position: absolute;
   font-family: var(--display);
   font-weight: 700;
-  font-size: 280px;
+  font-size: clamp(80px, 18vw, 220px);
   letter-spacing: -0.06em;
   color: rgba(0,0,0,0.05);
   top: 50%;
@@ -1843,6 +1868,10 @@ footer {
       <span class="line">by someone</span>
       <span class="line">who ships it.</span>
     </h1>
+    <div class="hero-taglines">
+      <div class="hero-tagline-item">Java Skills + Real Projects = Dream Job</div>
+      <div class="hero-tagline-item hero-tagline-accent">GET HIRED. NOT JUST TRAINED</div>
+    </div>
   </div>
 
   <div class="hero-grid">
@@ -2385,14 +2414,6 @@ footer {
         <li><a href="#courses">Courses</a></li>
         <li><a href="#testimonials">Students</a></li>
         <li><a href="#faq">FAQ</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>/ Connect</h5>
-      <ul>
-        <li><a href="https://wa.me/917008673347" target="_blank">WhatsApp</a></li>
-        <li><a href="mailto:javanoxlab@gmail.com">Email</a></li>
-        <li><a href="tel:+917008673347">+91 70086 73347</a></li>
       </ul>
     </div>
   </div>
